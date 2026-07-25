@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E1620">
+<title>D-98 · 전기기사 실기 로드맵</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230E1620'/><path d='M16 5l3 8h8l-6.5 5 2.5 9-7-5.5-7 5.5 2.5-9L5 13h8z' fill='%23E8B33C'/></svg>">
+<style>
+:root{
+  --night:#0E1620; --night-2:#16212E; --card:#1B2836; --line:#2C3D4E;
+  --ink:#E9F0F4; --ink-dim:#8CA0B0; --ink-faint:#5A6E7E;
+  --way:#E8B33C;        /* camino yellow arrow */
+  --gs:#6FA8DC;         /* 기술사 */
+  --gisa:#4FBF8B;       /* 기사 실기 */
+  --camino:#E8B33C;     /* 순례 */
+  --alert:#E06B5A;      /* 접수/시험 */
+  --sum:#B98CD9;        /* 요약집 */
+  --mono:ui-monospace,'SF Mono','Cascadia Mono','D2Coding',Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 96px}
+
+/* ---------- hero: the waypoint marker ---------- */
+header{padding:22px 2px 16px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.dcount{font-family:var(--mono);line-height:.86}
+.dcount b{display:block;font-size:64px;font-weight:800;letter-spacing:-.05em;color:var(--way)}
+.dcount span{display:block;font-size:11px;letter-spacing:.28em;color:var(--ink-faint);margin-top:9px}
+.htitle{flex:1;min-width:170px}
+.htitle h1{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.htitle p{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:5px}
+
+/* ---------- signature: waypoint spine ---------- */
+.spine{position:relative;margin:6px 0 20px;padding:14px 0 8px}
+.spine .rail{position:absolute;left:0;right:0;top:26px;height:3px;background:var(--line);border-radius:2px}
+.spine .fill{position:absolute;left:0;top:26px;height:3px;background:var(--way);border-radius:2px;
+  transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.marks{position:relative;display:flex}
+.mk{position:relative;text-align:left}
+.mk .dot{width:11px;height:11px;border-radius:50%;background:var(--night);
+  border:3px solid var(--line);margin-left:-1px}
+.mk.done .dot{border-color:var(--way);background:var(--way)}
+.mk.now .dot{border-color:var(--way);background:var(--night);
+  box-shadow:0 0 0 5px rgba(232,179,60,.16)}
+.mk .lbl{font-family:var(--mono);font-size:9.5px;color:var(--ink-faint);margin-top:9px;letter-spacing:.04em}
+.mk .lbl b{display:block;color:var(--ink-dim);font-size:10px;font-weight:700}
+
+/* ---------- tabs ---------- */
+nav{display:flex;gap:5px;margin-bottom:16px}
+nav button{flex:1;padding:11px 2px;font-size:13px;font-weight:700;font-family:var(--sans);
+  background:var(--night-2);border:1px solid var(--line);color:var(--ink-dim);
+  border-radius:9px;cursor:pointer;transition:.16s}
+nav button[aria-selected="true"]{background:var(--card);border-color:var(--way);color:var(--way)}
+nav button:focus-visible,.chk:focus-visible,.pillbtn:focus-visible{outline:2px solid var(--way);outline-offset:2px}
+
+.pane{display:none}.pane.on{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- day cards ---------- */
+.phasehead{display:flex;align-items:center;gap:9px;margin:22px 0 10px;padding-top:8px}
+.phasehead .tag{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;
+  padding:4px 9px;border-radius:5px;background:var(--card);border:1px solid var(--line)}
+.phasehead h2{font-size:13.5px;font-weight:700;letter-spacing:-.01em}
+.phasehead .cnt{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+
+.day{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:12px 13px;margin-bottom:8px;border-left:3px solid var(--line)}
+.day.pA{border-left-color:var(--gs)} .day.pB{border-left-color:var(--gisa)}
+.day.pC{border-left-color:var(--camino)} .day.pD{border-left-color:var(--sum)}
+.day.today{border-color:var(--way);box-shadow:0 0 0 1px rgba(232,179,60,.3)}
+.day.allDone{opacity:.48}
+.dhead{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.dhead .dt{font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.01em}
+.dhead .wd{font-size:11px;color:var(--ink-faint)}
+.dhead .wd.sat{color:#7FB2E5}.dhead .wd.sun{color:#E5877F}
+.dhead .note{font-size:10px;font-weight:700;padding:2.5px 7px;border-radius:4px;
+  background:rgba(232,179,60,.13);color:var(--way)}
+.dhead .dd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-faint)}
+
+.task{display:flex;align-items:flex-start;gap:9px;padding:6px 0;cursor:pointer}
+.task+.task{border-top:1px dashed rgba(44,61,78,.7)}
+.chk{flex:none;width:19px;height:19px;margin-top:1px;border-radius:5px;border:1.5px solid var(--line);
+  background:var(--night-2);position:relative;transition:.14s}
+.task.on .chk{background:var(--way);border-color:var(--way)}
+.task.on .chk::after{content:'';position:absolute;left:6px;top:2.5px;width:5px;height:9px;
+  border:solid var(--night);border-width:0 2.2px 2.2px 0;transform:rotate(42deg)}
+.task .txt{font-size:13px;line-height:1.5;color:var(--ink)}
+.task.big .txt{font-weight:700}
+.task.on .txt{color:var(--ink-faint);text-decoration:line-through}
+.k{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;padding:1.5px 5px;
+  border-radius:3px;margin-right:6px;vertical-align:1.5px}
+.k-gs{background:rgba(111,168,220,.16);color:var(--gs)}
+.k-gisa{background:rgba(79,191,139,.16);color:var(--gisa)}
+.k-tts,.k-kec{background:rgba(140,160,176,.14);color:var(--ink-dim)}
+.k-note{background:rgba(224,107,90,.14);color:var(--alert)}
+.k-sum{background:rgba(185,140,217,.16);color:var(--sum)}
+.k-admin,.k-exam{background:rgba(224,107,90,.2);color:var(--alert)}
+.k-rest{background:rgba(90,110,126,.16);color:var(--ink-faint)}
+
+/* ---------- stats ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px}
+.stat b{display:block;font-family:var(--mono);font-size:27px;font-weight:800;letter-spacing:-.03em}
+.stat span{display:block;font-size:10.5px;color:var(--ink-dim);margin-top:5px;letter-spacing:.02em}
+.bar{height:7px;background:var(--night-2);border-radius:4px;overflow:hidden;margin-top:9px}
+.bar i{display:block;height:100%;border-radius:4px;transition:width .5s}
+.pbox{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px;margin-bottom:8px}
+.pbox .top{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.pbox .top b{font-size:13.5px}
+.pbox .top em{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);font-style:normal;margin-left:auto}
+.pbox p{font-size:11.5px;color:var(--ink-dim);line-height:1.55;margin-top:5px}
+
+.pillbtn{font-family:var(--mono);font-size:11px;font-weight:700;padding:8px 13px;border-radius:7px;
+  background:var(--night-2);border:1px solid var(--line);color:var(--ink-dim);cursor:pointer}
+.pillbtn:active{transform:scale(.97)}
+.row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.hint{font-size:11px;color:var(--ink-faint);line-height:1.6;margin-top:12px}
+
+/* ---------- jump ---------- */
+#jump{position:fixed;left:0;right:0;bottom:0;background:var(--night-2);
+  border-top:1px solid var(--line);padding:9px 14px calc(9px + env(safe-area-inset-bottom));
+  display:flex;gap:7px;justify-content:center;z-index:20}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:380px){.dcount b{font-size:52px}.mk .lbl{font-size:8.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="dcount"><b id="dnum">–</b><span id="dlabel">TO EXAM</span></div>
+    <div class="htitle">
+      <h1>전기기사 실기 3회차 · 10월 25일(일) 09:30</h1>
+      <p id="subline">건축전기설비기술사 필기 8/22 · 산티아고 9/29–10/9</p>
+    </div>
+  </header>
+
+  <div class="spine" id="spine">
+    <div class="rail"></div><div class="fill" id="spinefill"></div>
+    <div class="marks" id="marks"></div>
+  </div>
+
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-p="today">오늘</button>
+    <button role="tab" aria-selected="false" data-p="plan">전체일정</button>
+    <button role="tab" aria-selected="false" data-p="stat">진도</button>
+  </nav>
+
+  <section class="pane on" id="p-today"></section>
+  <section class="pane" id="p-plan"></section>
+  <section class="pane" id="p-stat"></section>
+</div>
+
+<div id="jump">
+  <button class="pillbtn" id="btnToday">오늘로</button>
+  <button class="pillbtn" id="btnPhase">현재 구간</button>
+</div>
+
+<script>
+const PLAN = [{"d":"2026-07-20","w":"월","phase":"A","note":"","tasks":[{"t":"기술사: 수변전설비 계획·용량산정","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-21","w":"화","phase":"A","note":"","tasks":[{"t":"기술사: 변압기 선정·병렬운전·손실","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-22","w":"수","phase":"A","note":"","tasks":[{"t":"기술사: 예비전원(발전기·UPS·축전지)","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-23","w":"목","phase":"A","note":"","tasks":[{"t":"기술사: 접지설계·등전위본딩·KEC","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-24","w":"금","phase":"A","note":"","tasks":[{"t":"기술사: 간선·배선설계·전압강하","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-25","w":"토","phase":"A","note":"","tasks":[{"t":"기사 실기 2021-1회, 2021-2회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-07-26","w":"일","phase":"A","note":"","tasks":[{"t":"기사 실기 2021-3회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-07-27","w":"월","phase":"A","note":"","tasks":[{"t":"기술사: 조명설계·에너지절약","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-28","w":"화","phase":"A","note":"","tasks":[{"t":"기술사: 동력설비·전동기 기동방식","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-29","w":"수","phase":"A","note":"","tasks":[{"t":"기술사: 정보통신·방재설비","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-30","w":"목","phase":"A","note":"","tasks":[{"t":"기술사: 피뢰·서지보호(SPD)","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-07-31","w":"금","phase":"A","note":"","tasks":[{"t":"기술사: 고조파·역률·전력품질","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-01","w":"토","phase":"A","note":"","tasks":[{"t":"기사 실기 2022-1회, 2022-2회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-02","w":"일","phase":"A","note":"","tasks":[{"t":"기사 실기 2022-3회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-03","w":"월","phase":"A","note":"","tasks":[{"t":"기술사: 신재생(태양광·ESS)·전기차충전설비","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-04","w":"화","phase":"A","note":"","tasks":[{"t":"기술사: 에너지절약설계기준·법규","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-05","w":"수","phase":"A","note":"","tasks":[{"t":"기술사: 수용률·부등률·부하율 계산","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-06","w":"목","phase":"A","note":"","tasks":[{"t":"기술사: 단락전류·차단기 선정","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-07","w":"금","phase":"A","note":"","tasks":[{"t":"기술사: 시퀀스·자동제어·BAS","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-08","w":"토","phase":"A","note":"","tasks":[{"t":"기사 실기 2023-1회, 2023-2회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-09","w":"일","phase":"A","note":"","tasks":[{"t":"기사 실기 2023-3회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-10","w":"월","phase":"A","note":"","tasks":[{"t":"기술사: 건축전기 시공·감리·유지관리","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-11","w":"화","phase":"A","note":"","tasks":[{"t":"기술사: 수변전설비 계획·용량산정","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-12","w":"수","phase":"A","note":"","tasks":[{"t":"기술사: 변압기 선정·병렬운전·손실","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-13","w":"목","phase":"A","note":"","tasks":[{"t":"기술사: 예비전원(발전기·UPS·축전지)","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-14","w":"금","phase":"A","note":"","tasks":[{"t":"기술사: 접지설계·등전위본딩·KEC","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-15","w":"토","phase":"A","note":"","tasks":[{"t":"기사 실기 2024-1회, 2024-2회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-16","w":"일","phase":"A","note":"","tasks":[{"t":"기사 실기 2024-3회 90분 실전","k":"gisa"},{"t":"기술사 기출 토픽 답안 2개 작성","k":"gs"},{"t":"오답 → 오답노트 앱 입력","k":"note"}]},{"d":"2026-08-17","w":"월","phase":"A","note":"","tasks":[{"t":"기술사: 간선·배선설계·전압강하","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-18","w":"화","phase":"A","note":"","tasks":[{"t":"기술사: 조명설계·에너지절약","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-19","w":"수","phase":"A","note":"","tasks":[{"t":"기술사: 동력설비·전동기 기동방식","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-20","w":"목","phase":"A","note":"","tasks":[{"t":"기술사: 정보통신·방재설비","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-21","w":"금","phase":"A","note":"","tasks":[{"t":"기술사: 피뢰·서지보호(SPD)","k":"gs"},{"t":"답안 3~4개 작성 (100분 감각)","k":"gs"},{"t":"단답 100선 앱 1회전 (이동 중 TTS)","k":"tts"}]},{"d":"2026-08-22","w":"토","phase":"A","note":"시험일","tasks":[{"t":"건축전기설비기술사 필기 시험","k":"gs","big":1}]},{"d":"2026-08-23","w":"일","phase":"A","note":"휴식","tasks":[{"t":"완전 휴식 — 답안 복기는 나중에","k":"rest"}]},{"d":"2026-08-24","w":"월","phase":"A","note":"휴식","tasks":[{"t":"완전 휴식 — 답안 복기는 나중에","k":"rest"}]},{"d":"2026-08-25","w":"화","phase":"B","note":"","tasks":[{"t":"2004-1회, 2004-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-08-26","w":"수","phase":"B","note":"","tasks":[{"t":"2004-3회, 2005-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-08-27","w":"목","phase":"B","note":"","tasks":[{"t":"2005-2회, 2005-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-08-28","w":"금","phase":"B","note":"","tasks":[{"t":"2006-1회, 2006-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-08-29","w":"토","phase":"B","note":"","tasks":[{"t":"2006-3회, 2007-1회, 2007-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-08-30","w":"일","phase":"B","note":"","tasks":[{"t":"2007-3회, 2008-1회, 2008-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-08-31","w":"월","phase":"B","note":"","tasks":[{"t":"2008-3회, 2009-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-01","w":"화","phase":"B","note":"","tasks":[{"t":"2009-2회, 2009-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-02","w":"수","phase":"B","note":"","tasks":[{"t":"2010-1회, 2010-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-03","w":"목","phase":"B","note":"","tasks":[{"t":"2010-3회, 2011-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-04","w":"금","phase":"B","note":"","tasks":[{"t":"2011-2회, 2011-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-05","w":"토","phase":"B","note":"","tasks":[{"t":"2012-1회, 2012-2회, 2012-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-06","w":"일","phase":"B","note":"","tasks":[{"t":"2013-1회, 2013-2회, 2013-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-07","w":"월","phase":"B","note":"","tasks":[{"t":"2014-1회, 2014-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-08","w":"화","phase":"B","note":"","tasks":[{"t":"2014-3회, 2015-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-09","w":"수","phase":"B","note":"","tasks":[{"t":"2015-2회, 2015-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-10","w":"목","phase":"B","note":"","tasks":[{"t":"2016-1회, 2016-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-11","w":"금","phase":"B","note":"","tasks":[{"t":"2016-3회, 2017-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-12","w":"토","phase":"B","note":"","tasks":[{"t":"2017-2회, 2017-3회, 2018-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-13","w":"일","phase":"B","note":"","tasks":[{"t":"2018-2회, 2018-3회, 2019-1회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-14","w":"월","phase":"B","note":"","tasks":[{"t":"2019-2회, 2019-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-15","w":"화","phase":"B","note":"","tasks":[{"t":"2020-1회, 2020-2회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-16","w":"수","phase":"B","note":"","tasks":[{"t":"2020-3회 — 회차 단위 90분 타이머","k":"gisa","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-17","w":"목","phase":"B","note":"","tasks":[{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-18","w":"금","phase":"B","note":"","tasks":[{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-19","w":"토","phase":"B","note":"","tasks":[{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-20","w":"일","phase":"B","note":"","tasks":[{"t":"채점 + 오답 앱 입력 + 별표","k":"note"}]},{"d":"2026-09-21","w":"월","phase":"B","note":"원서접수","tasks":[{"t":"⚠️ 원서접수 10:00 오픈 — 큐넷","k":"admin","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-22","w":"화","phase":"B","note":"","tasks":[{"t":"접수 확인 (미완료 시 오늘 처리)","k":"admin"},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-23","w":"수","phase":"B","note":"접수 마감","tasks":[{"t":"⚠️ 접수 마감 18:00 — 최종 확인","k":"admin","big":1},{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-24","w":"목","phase":"B","note":"","tasks":[{"t":"채점 + 오답 앱 입력 + 별표","k":"note"},{"t":"단답 100선 TTS (이동 중)","k":"tts"}]},{"d":"2026-09-25","w":"금","phase":"B","note":"요약집 제작","tasks":[{"t":"요약집 제작: 계산문제 공식 카드 — 유형별 풀이 스켈레톤","k":"sum","big":1},{"t":"신규 문제 풀이 금지","k":"rest"}]},{"d":"2026-09-26","w":"토","phase":"B","note":"요약집 제작","tasks":[{"t":"요약집 제작: 단답형 최빈출 100 정리 + 앱 동기화","k":"sum","big":1},{"t":"신규 문제 풀이 금지","k":"rest"}]},{"d":"2026-09-27","w":"일","phase":"B","note":"요약집 제작","tasks":[{"t":"요약집 제작: KEC 조항별 수치 (접지저항·이격거리·절연저항)","k":"sum","big":1},{"t":"신규 문제 풀이 금지","k":"rest"}]},{"d":"2026-09-28","w":"월","phase":"B","note":"요약집 제작","tasks":[{"t":"요약집 제작: 시퀀스 회로 패턴 10선 + 폰 오프라인 최종 점검","k":"sum","big":1},{"t":"신규 문제 풀이 금지","k":"rest"},{"t":"📕 출발 전 체크: 4종 자료 폰에서 오프라인 열람 확인","k":"admin"}]},{"d":"2026-09-29","w":"화","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 1)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-09-30","w":"수","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 2)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-01","w":"목","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 3)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-02","w":"금","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 4)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-03","w":"토","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 5)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-04","w":"일","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 6)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-05","w":"월","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 7)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-06","w":"화","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 8)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-07","w":"수","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 9)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-08","w":"목","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 10)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-09","w":"금","phase":"C","note":"산티아고","tasks":[{"t":"걷는 중 단답 100선 TTS 2~3회전 (Day 11)","k":"tts","big":1},{"t":"알베르게 도착 후 30분: 오답노트 20문항","k":"note"},{"t":"KEC 37문항 앱 훑기 (여유 있을 때만)","k":"kec"}]},{"d":"2026-10-10","w":"토","phase":"D","note":"감각 복원","tasks":[{"t":"실전 모의 2025-1회 — 점수 낮아도 정상","k":"gisa","big":1},{"t":"계산 손 속도 복원: 공식 카드 필사","k":"sum"}]},{"d":"2026-10-11","w":"일","phase":"D","note":"감각 복원","tasks":[{"t":"실전 모의 2025-2회 — 점수 낮아도 정상","k":"gisa","big":1},{"t":"계산 손 속도 복원: 공식 카드 필사","k":"sum"}]},{"d":"2026-10-12","w":"월","phase":"D","note":"감각 복원","tasks":[{"t":"실전 모의 2025-3회 — 점수 낮아도 정상","k":"gisa","big":1},{"t":"계산 손 속도 복원: 공식 카드 필사","k":"sum"}]},{"d":"2026-10-13","w":"화","phase":"D","note":"","tasks":[{"t":"실전 모의 재풀이 회차(오답 많았던 회차)","k":"gisa","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-14","w":"수","phase":"D","note":"","tasks":[{"t":"오답 + 별표 문항 재풀이","k":"note","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-15","w":"목","phase":"D","note":"","tasks":[{"t":"실전 모의 재풀이 회차(오답 많았던 회차)","k":"gisa","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-16","w":"금","phase":"D","note":"","tasks":[{"t":"오답 + 별표 문항 재풀이","k":"note","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-17","w":"토","phase":"D","note":"","tasks":[{"t":"실전 모의 재풀이 회차(오답 많았던 회차)","k":"gisa","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-18","w":"일","phase":"D","note":"","tasks":[{"t":"오답 + 별표 문항 재풀이","k":"note","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-19","w":"월","phase":"D","note":"","tasks":[{"t":"실전 모의 재풀이 회차(오답 많았던 회차)","k":"gisa","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-20","w":"화","phase":"D","note":"","tasks":[{"t":"오답 + 별표 문항 재풀이","k":"note","big":1},{"t":"요약집 1회독","k":"sum"},{"t":"단답 TTS (이동 중)","k":"tts"}]},{"d":"2026-10-21","w":"수","phase":"D","note":"마무리","tasks":[{"t":"신규 문제 금지 — 요약집 + 오답노트만","k":"sum","big":1},{"t":"KEC 수치 암기 점검","k":"kec"}]},{"d":"2026-10-22","w":"목","phase":"D","note":"마무리","tasks":[{"t":"신규 문제 금지 — 요약집 + 오답노트만","k":"sum","big":1},{"t":"KEC 수치 암기 점검","k":"kec"}]},{"d":"2026-10-23","w":"금","phase":"D","note":"마무리","tasks":[{"t":"신규 문제 금지 — 요약집 + 오답노트만","k":"sum","big":1},{"t":"KEC 수치 암기 점검","k":"kec"}]},{"d":"2026-10-24","w":"토","phase":"D","note":"마무리","tasks":[{"t":"신규 문제 금지 — 요약집 + 오답노트만","k":"sum","big":1},{"t":"KEC 수치 암기 점검","k":"kec"},{"t":"준비물 확인: 수험표·신분증·공학용계산기·흑색볼펜","k":"admin","big":1}]},{"d":"2026-10-25","w":"일","phase":"D","note":"시험일","tasks":[{"t":"전기기사 실기 3회차 (09:30 1부)","k":"exam","big":1}]}];
+const EXAM = '2026-10-25';
+const KEY = 'egisa-roadmap-v1';
+
+const PHASES = [
+  {id:'A', from:'2026-07-20', to:'2026-08-24', name:'기술사 필기 주력', short:'기술사',
+   desc:'주중은 기술사 답안 작성에 100%. 주말 반나절만 기사 KEC 15회분으로 감각 유지. 겹치는 단원(수변전·조명·접지·예비전원)은 기술사 공부가 그대로 기사 자산이 됩니다.'},
+  {id:'B', from:'2026-08-25', to:'2026-09-28', name:'기사 실기 전력질주', short:'실기',
+   desc:'2004~2020년 51회분을 5주에. 반드시 회차 단위 90분 타이머, 단원별 풀이 금지. 마지막 4일(9/25~28)은 문제를 끊고 여행용 요약집을 직접 만듭니다 — 만드는 과정이 곧 복습입니다.'},
+  {id:'C', from:'2026-09-29', to:'2026-10-09', name:'산티아고 · 유지', short:'순례',
+   desc:'하루 25km 걷는 동안 문제는 못 풉니다. 폰 하나로 끝냅니다: 걷는 중 단답 TTS, 저녁 30분 오답노트 20문항. 그 이상 욕심내면 순례도 공부도 안 됩니다.'},
+  {id:'D', from:'2026-10-10', to:'2026-10-25', name:'복원 · 마무리', short:'마무리',
+   desc:'11일 쉬면 계산 감각과 손 속도가 확실히 떨어집니다. 첫 3일은 점수를 보지 말고 감각만 되돌리세요. 마지막 5일은 신규 문제 금지.'}
+];
+const KLAB={gs:'기술사',gisa:'기사',tts:'TTS',kec:'KEC',note:'오답',sum:'요약집',admin:'행정',exam:'시험',rest:'휴식'};
+
+let done = {};
+try{ done = JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ done = {}; }
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}};
+
+const todayISO=()=>{const n=new Date();return new Date(n.getTime()-n.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const dayDiff=(a,b)=>Math.round((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/864e5);
+const tid=(d,i)=>d+'#'+i;
+const phaseOf=k=>PHASES.find(p=>k>=p.from&&k<=p.to)||PHASES[3];
+
+/* ---------- hero + spine ---------- */
+function paintHero(){
+  const t=todayISO(), left=dayDiff(t,EXAM);
+  const el=document.getElementById('dnum'), lb=document.getElementById('dlabel');
+  if(left>0){el.textContent='D-'+left;lb.textContent='시험까지';}
+  else if(left===0){el.textContent='D-DAY';lb.textContent='오늘 09:30';}
+  else {el.textContent='종료';lb.textContent='수고하셨습니다';}
+
+  const t0=PLAN[0].d, t1=PLAN[PLAN.length-1].d, span=dayDiff(t0,t1);
+  const pos=Math.min(Math.max(dayDiff(t0,t),0),span);
+  document.getElementById('spinefill').style.width=(pos/span*100)+'%';
+
+  const marks=document.getElementById('marks'); marks.innerHTML='';
+  PHASES.forEach((p,i)=>{
+    const w=(dayDiff(p.from,p.to)+1)/(span+1)*100;
+    const d=document.createElement('div'); d.className='mk'; d.style.width=w+'%';
+    if(t>p.to)d.classList.add('done'); if(t>=p.from&&t<=p.to)d.classList.add('now');
+    d.innerHTML='<div class="dot"></div><div class="lbl"><b>'+p.short+'</b>'+p.from.slice(5).replace('-','/')+'</div>';
+    marks.appendChild(d);
+  });
+}
+
+/* ---------- day card ---------- */
+function dayCard(day,showDday){
+  const t=todayISO();
+  const c=document.createElement('article');
+  c.className='day p'+day.phase; c.id='d-'+day.d;
+  if(day.d===t)c.classList.add('today');
+  const alldone=day.tasks.every((_,i)=>done[tid(day.d,i)]);
+  if(alldone&&day.d!==t)c.classList.add('allDone');
+
+  const wd=day.w==='토'?'sat':day.w==='일'?'sun':'';
+  const dd=dayDiff(t,day.d);
+  let ddtxt=''; if(showDday)ddtxt = dd===0?'오늘':dd>0?'D-'+dd:'지남';
+
+  const h=document.createElement('div'); h.className='dhead';
+  h.innerHTML='<span class="dt">'+day.d.slice(5).replace('-','/')+'</span>'+
+    '<span class="wd '+wd+'">'+day.w+'</span>'+
+    (day.note?'<span class="note">'+day.note+'</span>':'')+
+    '<span class="dd">'+ddtxt+'</span>';
+  c.appendChild(h);
+
+  day.tasks.forEach((tk,i)=>{
+    const id=tid(day.d,i);
+    const r=document.createElement('div');
+    r.className='task'+(done[id]?' on':'')+(tk.big?' big':'');
+    r.setAttribute('role','button'); r.tabIndex=0;
+    r.innerHTML='<div class="chk"></div><div class="txt"><span class="k k-'+tk.k+'">'+
+      (KLAB[tk.k]||tk.k)+'</span>'+tk.t+'</div>';
+    const flip=()=>{ done[id]?delete done[id]:done[id]=1; save(); r.classList.toggle('on');
+      const all=day.tasks.every((_,j)=>done[tid(day.d,j)]);
+      c.classList.toggle('allDone', all && day.d!==todayISO());
+      if(document.getElementById('p-stat').classList.contains('on'))paintStat(); };
+    r.onclick=flip;
+    r.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}};
+    c.appendChild(r);
+  });
+  return c;
+}
+
+/* ---------- panes ---------- */
+function paintToday(){
+  const box=document.getElementById('p-today'); box.innerHTML='';
+  const t=todayISO();
+  let idx=PLAN.findIndex(d=>d.d===t);
+  if(idx<0){
+    const nx=PLAN.find(d=>d.d>t);
+    const msg=document.createElement('div'); msg.className='pbox';
+    msg.innerHTML= nx
+      ? '<div class="top"><b>계획 시작 전</b></div><p>로드맵은 '+PLAN[0].d+'부터입니다. 아래는 첫날 일정입니다.</p>'
+      : '<div class="top"><b>계획 종료</b></div><p>10/25 시험까지의 로드맵이 모두 지났습니다.</p>';
+    box.appendChild(msg);
+    idx = nx?PLAN.indexOf(nx):PLAN.length-1;
+  }
+  const p=phaseOf(PLAN[idx].d);
+  const pb=document.createElement('div'); pb.className='pbox';
+  pb.innerHTML='<div class="top"><b>구간 '+p.id+' · '+p.name+'</b><em>'+
+    p.from.slice(5).replace('-','/')+'–'+p.to.slice(5).replace('-','/')+'</em></div><p>'+p.desc+'</p>';
+  box.appendChild(pb);
+
+  for(let i=idx;i<Math.min(idx+4,PLAN.length);i++) box.appendChild(dayCard(PLAN[i],true));
+}
+
+function paintPlan(){
+  const box=document.getElementById('p-plan'); box.innerHTML='';
+  PHASES.forEach(p=>{
+    const ds=PLAN.filter(d=>d.d>=p.from&&d.d<=p.to);
+    let tot=0,dn=0; ds.forEach(d=>d.tasks.forEach((_,i)=>{tot++;if(done[tid(d.d,i)])dn++}));
+    const h=document.createElement('div'); h.className='phasehead'; h.id='ph-'+p.id;
+    h.innerHTML='<span class="tag">'+p.id+'</span><h2>'+p.name+'</h2><span class="cnt">'+dn+'/'+tot+'</span>';
+    box.appendChild(h);
+    ds.forEach(d=>box.appendChild(dayCard(d,false)));
+  });
+}
+
+function paintStat(){
+  const box=document.getElementById('p-stat'); box.innerHTML='';
+  const t=todayISO();
+  let tot=0,dn=0,past=0,pastDn=0;
+  const byK={};
+  PLAN.forEach(d=>d.tasks.forEach((tk,i)=>{
+    tot++; const ok=!!done[tid(d.d,i)]; if(ok)dn++;
+    if(d.d<=t){past++; if(ok)pastDn++;}
+    byK[tk.k]=byK[tk.k]||{t:0,d:0}; byK[tk.k].t++; if(ok)byK[tk.k].d++;
+  }));
+  const rate=past?Math.round(pastDn/past*100):0;
+
+  const g=document.createElement('div'); g.className='grid';
+  g.innerHTML=
+    '<div class="stat"><b style="color:var(--way)">'+rate+'%</b><span>오늘까지 이행률</span>'+
+      '<div class="bar"><i style="width:'+rate+'%;background:var(--way)"></i></div></div>'+
+    '<div class="stat"><b>'+dn+'<small style="font-size:14px;color:var(--ink-faint)">/'+tot+'</small></b>'+
+      '<span>전체 완료 항목</span><div class="bar"><i style="width:'+(tot?dn/tot*100:0)+'%;background:var(--gisa)"></i></div></div>';
+  box.appendChild(g);
+
+  PHASES.forEach(p=>{
+    const ds=PLAN.filter(d=>d.d>=p.from&&d.d<=p.to);
+    let a=0,b=0; ds.forEach(d=>d.tasks.forEach((_,i)=>{a++;if(done[tid(d.d,i)])b++}));
+    const col={A:'var(--gs)',B:'var(--gisa)',C:'var(--camino)',D:'var(--sum)'}[p.id];
+    const el=document.createElement('div'); el.className='pbox';
+    el.innerHTML='<div class="top"><b>'+p.id+' · '+p.name+'</b><em>'+b+'/'+a+'</em></div>'+
+      '<div class="bar"><i style="width:'+(a?b/a*100:0)+'%;background:'+col+'"></i></div>';
+    box.appendChild(el);
+  });
+
+  const kb=document.createElement('div'); kb.className='pbox';
+  kb.innerHTML='<div class="top"><b>유형별</b></div>'+
+    Object.keys(byK).sort((x,y)=>byK[y].t-byK[x].t).map(k=>
+      '<p style="display:flex;gap:8px"><span class="k k-'+k+'">'+(KLAB[k]||k)+
+      '</span><span style="margin-left:auto;font-family:var(--mono)">'+byK[k].d+'/'+byK[k].t+'</span></p>').join('');
+  box.appendChild(kb);
+
+  const row=document.createElement('div'); row.className='row';
+  const ex=document.createElement('button'); ex.className='pillbtn'; ex.textContent='기록 내보내기';
+  ex.onclick=()=>{const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(done)],{type:'application/json'}));
+    a.download='roadmap-progress-'+todayISO()+'.json'; a.click();};
+  const im=document.createElement('button'); im.className='pillbtn'; im.textContent='기록 복원';
+  im.onclick=()=>{const f=document.createElement('input'); f.type='file'; f.accept='.json';
+    f.onchange=e=>{const r=new FileReader(); r.onload=()=>{try{done=JSON.parse(r.result);save();paintAll();}
+      catch(err){alert('파일을 읽지 못했습니다. 내보낸 JSON 파일인지 확인하세요.')}}; r.readAsText(e.target.files[0]);};
+    f.click();};
+  const rs=document.createElement('button'); rs.className='pillbtn'; rs.textContent='전체 초기화';
+  rs.onclick=()=>{if(confirm('체크 기록을 모두 지웁니다. 되돌릴 수 없습니다.')){done={};save();paintAll();}};
+  row.append(ex,im,rs); box.appendChild(row);
+
+  const h=document.createElement('p'); h.className='hint';
+  h.textContent='기록은 이 브라우저에만 저장됩니다. 산티아고 출발 전 한 번 내보내 두세요.';
+  box.appendChild(h);
+}
+
+function paintAll(){paintHero();paintToday();paintPlan();paintStat();}
+
+/* ---------- nav ---------- */
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+    document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+    if(b.dataset.p==='stat')paintStat();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+});
+document.getElementById('btnToday').onclick=()=>{
+  document.querySelector('nav button[data-p="today"]').click();
+};
+document.getElementById('btnPhase').onclick=()=>{
+  document.querySelector('nav button[data-p="plan"]').click();
+  const p=phaseOf(todayISO());
+  setTimeout(()=>{const el=document.getElementById('ph-'+p.id);
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},60);
+};
+
+paintAll();
+</script>
+</body>
+</html>
