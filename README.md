@@ -79,3 +79,10 @@ curl -sL https://codeload.github.com/morogohi/egisa-drill/tar.gz/refs/heads/main
 ## 주의
 
 기출 문항의 취지를 재구성한 개인 학습용 자료입니다. 개인 학습 목적으로만 사용하세요.
+
+
+## 저작권 및 이용조건
+- **저작권자:** 양인석 (Inseok Yang, GitHub 계정 morogohi) · © 2026 · All rights reserved. — [LICENSE](LICENSE)
+- 자체 제작 코드·디자인·콘텐츠의 복제·수정·재배포 및 별도 서비스로의 이용은 사전 서면 허락이 필요합니다. 저장소 공개는 오픈소스 이용허락이 아니며, GitHub 이용약관에 따른 열람·포크는 가능합니다.
+- 단답 문항에 담긴 기출문제 내용은 원 권리자의 조건을 따르며 이 저장소의 권리 주장 대상이 아닙니다.
+- 상세 안내: https://morogohi.github.io/egisa-drill/copyright.html
